@@ -10,11 +10,11 @@ public class Task {
 
 
 
-    public Task(String title, int priority, LocalDate deadline, boolean completed) {
+    public Task(String title, int priority, LocalDate deadline) {
         this.title = title;
         setPriority(priority);
         this.deadline = deadline;
-        this.completed = completed;
+        this.completed = false;
     }
 
     public String getTitle() {
