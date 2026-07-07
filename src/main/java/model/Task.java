@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import exceptions.InvalidTaskException;
 
 public class Task {
     private String title;
@@ -10,9 +11,18 @@ public class Task {
 
 
 
-    public Task(String title, int priority, LocalDate deadline) {
+    public Task(String title, int priority, LocalDate deadline) throws InvalidTaskException {
+        if (title == null || title.trim().isEmpty()) {
+            throw new InvalidTaskException("عنوان تسک نمی‌تواند خالی باشد!");
+        }
+        if (priority < 1 || priority > 5) {
+            throw new InvalidTaskException("اولویت باید بین 1 تا 5 باشد!");
+        }
+        if (deadline == null) {
+            throw new InvalidTaskException("تاریخ تسک نمی‌تواند خالی باشد!");
+        }
         this.title = title;
-        setPriority(priority);
+        this.priority = priority;
         this.deadline = deadline;
         this.completed = false;
     }
@@ -29,9 +39,9 @@ public class Task {
         return priority;
     }
 
-    public void setPriority(int priority) {
+    public void setPriority(int priority) throws InvalidTaskException {
         if (priority < 1 || priority > 5) {
-            throw new IllegalArgumentException("Priority must be between 1 and 5");
+            throw new InvalidTaskException("اولویت باید بین 1 تا 5 باشد!");
         }
         this.priority = priority;
     }
