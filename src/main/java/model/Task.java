@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import exceptions.InvalidTaskException;
 
-public class Task {
+public class Task implements Comparable<Task> {
     private String title;
     private int priority;
     private LocalDate deadline;
@@ -60,5 +60,16 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    @Override
+    public int compareTo(Task other) {
+        if (this.priority > other.priority) {
+            return -1;
+        } else if (this.priority == other.priority) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

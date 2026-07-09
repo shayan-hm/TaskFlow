@@ -1,4 +1,3 @@
 USER,shayan,1234
-TASK,shayan,خرید نان,2,2026-07-10,false
 TASK,shayan,تحویل پروژه,5,2026-07-25,false
-TASK,shayan,مطالعه جاوا,3,2026-08-01,false
+TASK,shayan,مطالعه جاوا پیشرفته,4,2026-08-15,false
