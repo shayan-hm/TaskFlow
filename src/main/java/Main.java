@@ -25,6 +25,7 @@ public class Main {
 
 
         db.saveData(users, database);
+        System.out.println("\n✅ Phase 3: Data saved to tasks.txt successfully!");
 
         
         for (String username : database.keySet()) {
