@@ -3,6 +3,7 @@ import java.util.PriorityQueue;
 import java.io.File;
 import model.Task;
 import controller.TaskController;
+import view.CliView;
 import java.time.LocalDate;
 
 public class Main {
@@ -14,9 +15,6 @@ public class Main {
 
         TaskController controller = new TaskController();
         controller.startAutoSave();
-
-        CliView view = new CliView();
-        view.run(controller);
 
         controller.addTask("shayan", new Task("خرید نان", 2, LocalDate.of(2026, 7, 10)));
         controller.addTask("shayan", new Task("تحویل پروژه", 5, LocalDate.of(2026, 7, 25)));
@@ -47,5 +45,8 @@ public class Main {
                 System.out.println("- " + t.getTitle());
             }
         }
+
+        CliView view = new CliView();
+        view.run(controller);
     }
 }
