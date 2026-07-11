@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.PriorityQueue;
 import java.io.File;
 import model.Task;
@@ -16,30 +17,32 @@ public class Main {
         controller.addTask("shayan", new Task("خرید نان", 2, LocalDate.of(2026, 7, 10)));
         controller.addTask("shayan", new Task("تحویل پروژه", 5, LocalDate.of(2026, 7, 25)));
         controller.addTask("shayan", new Task("مطالعه جاوا", 3, LocalDate.of(2026, 8, 1)));
+        controller.addTask("shayan", new Task("ورزش صبحگاهی", 4, LocalDate.of(2026, 7, 15)));
 
-        System.out.println("\n✅ Phase 4: Tasks added via TaskController");
+        // mark one task as completed
+        controller.getTasksByPriority("shayan").peek();
+        List<Task> allTasks = controller.getHighPriorityTasks("shayan", 1);
+        allTasks.get(0).setCompleted(true);
 
-        System.out.println("\n📋 Tasks sorted by priority (highest first):");
-        PriorityQueue<Task> tasks = controller.getTasksByPriority("shayan");
-        while (!tasks.isEmpty()) {
-            Task t = tasks.poll();
-            System.out.println("  - " + t.getTitle() + " (Priority: " + t.getPriority() + ")");
+        System.out.println("Phase 5: Lambda & Stream API");
+
+        System.out.println("\nAll tasks:");
+        controller.printAllTasks("shayan");
+
+        System.out.println("\nHigh priority tasks (priority >= 4):");
+        List<Task> highPriority = controller.getHighPriorityTasks("shayan", 4);
+        for (Task t : highPriority) {
+            System.out.println("- " + t.getTitle() + " (Priority: " + t.getPriority() + ")");
         }
 
-        controller.deleteTask("shayan", "خرید نان");
-        System.out.println("\n🗑️ Deleted task: خرید نان");
-
-        controller.updateTask("shayan", "مطالعه جاوا",
-                new Task("مطالعه جاوا پیشرفته", 4, LocalDate.of(2026, 8, 15)));
-        System.out.println("✏️ Updated task: مطالعه جاوا → مطالعه جاوا پیشرفته (priority 4)");
-
-        System.out.println("\n📋 Remaining tasks by priority:");
-        PriorityQueue<Task> remaining = controller.getTasksByPriority("shayan");
-        while (!remaining.isEmpty()) {
-            Task t = remaining.poll();
-            System.out.println("  - " + t.getTitle() + " (Priority: " + t.getPriority() + ")");
+        System.out.println("\nCompleted tasks:");
+        List<Task> completed = controller.getCompletedTasks("shayan");
+        if (completed.isEmpty()) {
+            System.out.println("- no completed tasks");
+        } else {
+            for (Task t : completed) {
+                System.out.println("- " + t.getTitle());
+            }
         }
-
-        System.out.println("\n✅ Phase 4: Data saved to tasks.txt successfully!");
     }
 }
