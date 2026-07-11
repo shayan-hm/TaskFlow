@@ -20,7 +20,6 @@ public class TaskController {
         loadData();
     }
 
-    // add a task for a user
     public synchronized void addTask(String username, Task task) {
         if (!database.containsKey(username)) {
             database.put(username, new ArrayList<>());
@@ -35,7 +34,6 @@ public class TaskController {
         saveData();
     }
 
-    // delete a task by title for a user
     public synchronized void deleteTask(String username, String taskTitle) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
@@ -100,7 +98,7 @@ public class TaskController {
                 .forEach(task -> System.out.println("- " + task.getTitle() + " (Priority: " + task.getPriority() + ")"));
     }
 
-    // auto save in background thread every 5 seconds
+    // daemon thread saves every 5s; exits when main thread ends
     public synchronized void startAutoSave() {
         Thread autoSaveThread = new Thread(() -> {
             while (true) {

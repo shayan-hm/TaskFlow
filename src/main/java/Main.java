@@ -23,7 +23,6 @@ public class Main {
         controller.addTask("shayan", new Task("مطالعه جاوا", 3, LocalDate.of(2026, 8, 1)));
         controller.addTask("shayan", new Task("ورزش صبحگاهی", 4, LocalDate.of(2026, 7, 15)));
 
-        // mark one task as completed
         controller.getTasksByPriority("shayan").peek();
         List<Task> allTasks = controller.getHighPriorityTasks("shayan", 1);
         allTasks.get(0).setCompleted(true);

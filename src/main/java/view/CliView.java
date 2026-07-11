@@ -8,7 +8,6 @@ import java.util.Scanner;
 
 public class CliView {
 
-    // shows the menu options to the user
     public void showMenu() {
         System.out.println("\n===== TaskFlow Menu =====");
         System.out.println("1. Add Task");
@@ -18,7 +17,6 @@ public class CliView {
         System.out.print("Choose an option: ");
     }
 
-    // runs the cli menu loop
     public void run(TaskController controller) {
         Scanner scanner = new Scanner(System.in);
         String username = "user"; // default user for simplicity
@@ -31,7 +29,6 @@ public class CliView {
 
             switch (choice) {
                 case 1:
-                    // add a new task
                     System.out.print("Enter task title: ");
                     String title = scanner.nextLine();
                     System.out.print("Enter priority (1-5): ");
@@ -52,7 +49,6 @@ public class CliView {
                     break;
 
                 case 2:
-                    // delete a task by title
                     System.out.print("Enter task title to delete: ");
                     String delTitle = scanner.nextLine();
                     try {
@@ -64,7 +60,6 @@ public class CliView {
                     break;
 
                 case 3:
-                    // view all tasks
                     try {
                         controller.printAllTasks(username);
                     } catch (UserNotFoundException e) {
@@ -73,7 +68,6 @@ public class CliView {
                     break;
 
                 case 4:
-                    // exit the program
                     System.out.println("Goodbye!");
                     break;
 
