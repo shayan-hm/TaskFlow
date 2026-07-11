@@ -5,6 +5,8 @@ import model.User;
 import exceptions.*;
 import database.DatabaseManager;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskController {
     private HashMap<String, ArrayList<Task>> database;
@@ -68,5 +70,31 @@ public class TaskController {
 
     public void saveData() {
         dbManager.saveData(users, database);
+    }
+
+    public List<Task> getCompletedTasks(String username) throws UserNotFoundException {
+        if (!database.containsKey(username)) {
+            throw new UserNotFoundException("کاربر یافت نشد: " + username);
+        }
+        return database.get(username).stream()
+                .filter(Task::isCompleted)
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> getHighPriorityTasks(String username, int minPriority) throws UserNotFoundException {
+        if (!database.containsKey(username)) {
+            throw new UserNotFoundException("کاربر یافت نشد: " + username);
+        }
+        return database.get(username).stream()
+                .filter(task -> task.getPriority() >= minPriority)
+                .collect(Collectors.toList());
+    }
+
+    public void printAllTasks(String username) throws UserNotFoundException {
+        if (!database.containsKey(username)) {
+            throw new UserNotFoundException("کاربر یافت نشد: " + username);
+        }
+        database.get(username).stream()
+                .forEach(task -> System.out.println("- " + task.getTitle() + " (Priority: " + task.getPriority() + ")"));
     }
 }
