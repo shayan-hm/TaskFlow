@@ -13,6 +13,10 @@ public class Main {
         }
 
         TaskController controller = new TaskController();
+        controller.startAutoSave();
+
+        CliView view = new CliView();
+        view.run(controller);
 
         controller.addTask("shayan", new Task("خرید نان", 2, LocalDate.of(2026, 7, 10)));
         controller.addTask("shayan", new Task("تحویل پروژه", 5, LocalDate.of(2026, 7, 25)));

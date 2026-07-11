@@ -20,7 +20,8 @@ public class TaskController {
         loadData();
     }
 
-    public void addTask(String username, Task task) {
+    // add a task for a user
+    public synchronized void addTask(String username, Task task) {
         if (!database.containsKey(username)) {
             database.put(username, new ArrayList<>());
             if (!users.containsKey(username)) {
@@ -34,7 +35,8 @@ public class TaskController {
         saveData();
     }
 
-    public void deleteTask(String username, String taskTitle) throws UserNotFoundException {
+    // delete a task by title for a user
+    public synchronized void deleteTask(String username, String taskTitle) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
@@ -43,7 +45,7 @@ public class TaskController {
         saveData();
     }
 
-    public void updateTask(String username, String oldTitle, Task updatedTask) throws UserNotFoundException {
+    public synchronized void updateTask(String username, String oldTitle, Task updatedTask) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
@@ -57,22 +59,22 @@ public class TaskController {
         }
     }
 
-    public PriorityQueue<Task> getTasksByPriority(String username) throws UserNotFoundException {
+    public synchronized PriorityQueue<Task> getTasksByPriority(String username) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
         return new PriorityQueue<>(database.get(username));
     }
 
-    public void loadData() {
+    public synchronized void loadData() {
         dbManager.loadData(users, database);
     }
 
-    public void saveData() {
+    public synchronized void saveData() {
         dbManager.saveData(users, database);
     }
 
-    public List<Task> getCompletedTasks(String username) throws UserNotFoundException {
+    public synchronized List<Task> getCompletedTasks(String username) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
@@ -81,7 +83,7 @@ public class TaskController {
                 .collect(Collectors.toList());
     }
 
-    public List<Task> getHighPriorityTasks(String username, int minPriority) throws UserNotFoundException {
+    public synchronized List<Task> getHighPriorityTasks(String username, int minPriority) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
@@ -90,11 +92,28 @@ public class TaskController {
                 .collect(Collectors.toList());
     }
 
-    public void printAllTasks(String username) throws UserNotFoundException {
+    public synchronized void printAllTasks(String username) throws UserNotFoundException {
         if (!database.containsKey(username)) {
             throw new UserNotFoundException("کاربر یافت نشد: " + username);
         }
         database.get(username).stream()
                 .forEach(task -> System.out.println("- " + task.getTitle() + " (Priority: " + task.getPriority() + ")"));
+    }
+
+    // auto save in background thread every 5 seconds
+    public synchronized void startAutoSave() {
+        Thread autoSaveThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000);
+                    saveData();
+                    System.out.println("Auto-saved.");
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        autoSaveThread.setDaemon(true);
+        autoSaveThread.start();
     }
 }
